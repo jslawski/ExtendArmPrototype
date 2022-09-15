@@ -59,6 +59,22 @@ Shader "Custom/worldSpace"
 
             float alpha21 = abs(worldNormal.x);
             float alpha23 = abs(worldNormal.z);
+
+            if (alpha23>=0.5)
+            {
+                alpha23 = 1;
+            }else
+            {
+                alpha23 = 0;
+            }
+
+            if (alpha21>=0.5)
+            {
+                alpha21 = 1;
+            }else
+            {
+                alpha21 = 0;
+            }
         
             float3 tex21 = lerp(tex2, tex1, alpha21).rgb;
             float3 tex23 = lerp(tex21, tex3, alpha23).rgb;
@@ -79,6 +95,22 @@ Shader "Custom/worldSpace"
 
             float alpha21 = abs(worldNormal.x);
             float alpha23 = abs(worldNormal.z);
+
+            if (alpha23>=0.5)
+            {
+                alpha23 = 1;
+            }else
+            {
+                alpha23 = 0;
+            }
+
+            if (alpha21>=0.5)
+            {
+                alpha21 = 1;
+            }else
+            {
+                alpha21 = 0;
+            }
         
             float3 N21 = lerp(N2, N1, alpha21).rgb;
             float3 N23 = lerp(N21, N3, alpha23).rgb;
