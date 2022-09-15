@@ -17,10 +17,14 @@ public class PlayerArm : MonoBehaviour
 
     private Rigidbody armRB;
 
-    private Vector3 targetPosition;
 
+    [SerializeField, Range(0, 1000)]
+    public float armForce = 10f;
+    
+    [SerializeField]
+    private Rigidbody armPivot;
 
-
+    private float targetAngle;
 
     void Awake()
     {
@@ -34,7 +38,7 @@ public class PlayerArm : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {        
+    {                
         if (this.armDirection.magnitude < this.analogDeadZoneMagnitude)
         {
             this.armDirection = Vector2.zero;
@@ -42,14 +46,18 @@ public class PlayerArm : MonoBehaviour
 
         Vector2 armDirection2D = (this.armDirection * this.maxArmDistance);
         Vector3 directionVector = new Vector3(armDirection2D.x, armDirection2D.y, 0.0f);
-        this.targetPosition = this.playerParent.transform.position + directionVector;
+
+        this.targetAngle = Mathf.Atan2(directionVector.y, directionVector.x) * Mathf.Rad2Deg;
+
+        //this.targetPosition = this.playerParent.transform.position + directionVector;
     }
 
     private void FixedUpdate()
     {
+        this.armPivot.MoveRotation(Quaternion.Euler(0.0f, 0.0f, this.targetAngle));
         
-
-        this.armRB.MovePosition(this.targetPosition);
+        this.armRB.AddForce(this.armPivot.transform.right * this.armForce);
+        //this.armRB.MovePosition(this.targetPosition);
     }
 
     private void OnEnable()
