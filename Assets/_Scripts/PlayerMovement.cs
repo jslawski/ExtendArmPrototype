@@ -34,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     float gameHandFollowSpeed = 0.0f;
 
     [SerializeField]
-    private LineRenderer armRender;
+    private BezierArmRenderer armRender;
 
     void Awake()
     {
@@ -47,8 +47,6 @@ public class PlayerMovement : MonoBehaviour
         this.controls.PlayerMap.Arm.canceled += context => this.armDirection = Vector2.zero;
 
         this.playerRB = GetComponent<Rigidbody>();
-
-        this.armRender.positionCount = 2;
     }
 
     // Update is called once per frame
@@ -74,6 +72,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 GameObject gameHandInstance = Instantiate(this.gameHandPrefab, this.transform.position, new Quaternion());
                 this.gameHandRB = gameHandInstance.GetComponent<Rigidbody>();
+                this.armRender.SetupArmRenderer(this.gameHandRB.transform);
             }
 
             this.gameHandTargetPosition = Vector3.Lerp(this.gameHandRB.position,
@@ -89,12 +88,6 @@ public class PlayerMovement : MonoBehaviour
                                            this.armTargetPosition,
                                            this.gameHandFollowSpeed * Time.deltaTime);
             }
-        }
-
-        if (this.gameHandRB != null)
-        {
-            this.armRender.SetPosition(0, this.transform.position);
-            this.armRender.SetPosition(1, this.gameHandRB.position);
         }
     }
 
