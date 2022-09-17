@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
     public float analogDeadZoneMagnitude = 0.3f;
 
     [SerializeField]
-    private Rigidbody armPivot;
+    private GameObject armPivot;
 
     private Vector2 armDirection = Vector2.zero;
     private Vector2 prevArmDirection = Vector2.zero;
@@ -60,9 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
         this.playerRB.MovePosition(newPosition);
 
-        this.armPivot.MovePosition(newPosition);
-        this.armPivot.MoveRotation(Quaternion.Euler(0.0f, 0.0f, this.targetAngle));
-
+        this.armPivot.transform.rotation = Quaternion.Euler(0.0f, 0.0f, this.targetAngle);
     }
 
     private void OnEnable()
