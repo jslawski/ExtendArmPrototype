@@ -17,6 +17,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+        /*
+        Different changes oh no
+        */
+
+        Debug.LogError("This is gonna be bad");
+
         this.controls = new PlayerControls();
 
         this.controls.PlayerMap.Move.performed += context => this.moveVector = context.ReadValue<Vector2>();
