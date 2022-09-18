@@ -77,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
             this.gameHandTargetPosition = Vector3.Lerp(this.gameHandRB.position,
                                            this.armTargetPosition,
-                                           this.gameHandFollowSpeed * Time.deltaTime);
+                                           this.gameHandFollowSpeed * Time.fixedDeltaTime);
         }        
         
         if (this.armDirection.magnitude < this.analogDeadZoneMagnitude)
@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 this.gameHandTargetPosition = Vector3.Lerp(this.gameHandRB.position,
                                            this.armTargetPosition,
-                                           this.gameHandFollowSpeed * Time.deltaTime);
+                                           this.gameHandFollowSpeed * Time.fixedDeltaTime);
             }
         }
     }
@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
         {
             this.gameHandRB.MovePosition(this.gameHandTargetPosition);
 
-            if (Vector3.Distance(this.gameHandRB.position, this.armHand.transform.position) < 0.5f &&
+            if (Vector3.Distance(this.gameHandRB.position, this.armHand.transform.position) < 1.0f &&
                 this.armDirection == Vector2.zero)
             {
                 Destroy(this.gameHandRB.gameObject);
