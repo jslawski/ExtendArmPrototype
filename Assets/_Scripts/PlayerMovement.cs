@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody gameHandRB;
     private Vector3 gameHandTargetPosition;
 
-    [SerializeField, Range(0, 100)]
+    [SerializeField, Range(0, 500)]
     float gameHandFollowSpeed = 0.0f;
 
     [SerializeField]
@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 GameObject gameHandInstance = Instantiate(this.gameHandPrefab, this.transform.position, new Quaternion());
                 this.gameHandRB = gameHandInstance.GetComponent<Rigidbody>();
-                this.armRender.SetupArmRenderer(this.gameHandRB.transform);
+                this.armRender.SetupArmRenderer(this.gameHandRB.transform, this.armHand.transform);
             }
 
             this.gameHandTargetPosition = Vector3.Lerp(this.gameHandRB.position,
@@ -105,8 +105,8 @@ public class PlayerMovement : MonoBehaviour
         {
             this.gameHandRB.MovePosition(this.gameHandTargetPosition);
 
-            if (Vector3.Distance(this.gameHandRB.position, this.armHand.transform.position) < 0.1f &&
-                this.armTargetPosition == this.transform.position)
+            if (Vector3.Distance(this.gameHandRB.position, this.armHand.transform.position) < 0.5f &&
+                this.armDirection == Vector2.zero)
             {
                 Destroy(this.gameHandRB.gameObject);
                 this.gameHandRB = null;

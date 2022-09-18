@@ -13,32 +13,24 @@ public class BezierArmRenderer : MonoBehaviour
     [SerializeField]
     private Transform playerEndpoint;
     [SerializeField]
-    private Transform handEndpoint;
+    private Transform gameHandEndpoint;
 
-    [SerializeField]
+    private Transform metaHandTransform;
+
+    [SerializeField, Range(0, 1)]
     private float lowerPointDistancePercentage = 0.25f;
-    [SerializeField]
+    [SerializeField, Range(0, 1)]
     private float upperPointDistancePercentage = 0.75f;
 
-    [SerializeField]
-    private float lowerPointDeviation = 5f;
-    [SerializeField]
-    private float upperPointDeviation = 2f;
+    [SerializeField, Range(0, 1)]
+    private float lowerPointDeviation = 1.0f;
+    [SerializeField, Range(0, 1)]
+    private float upperPointDeviation = 0.5f;
 
-    [SerializeField]
-    private float lowerPointMoveSpeed = 5f;
-    [SerializeField]
-    private float upperPointMoveSpeed = 5f;
-
-    // Start is called before the first frame update
-    void Start()
+    public void SetupArmRenderer(Transform gameHand, Transform metaHand)
     {
-        
-    }
-
-    public void SetupArmRenderer(Transform handTransform)
-    {
-        this.handEndpoint = handTransform;
+        this.gameHandEndpoint = gameHand;
+        this.metaHandTransform = metaHand;
         this.armLine.positionCount = 100;
     }
 
@@ -50,21 +42,63 @@ public class BezierArmRenderer : MonoBehaviour
                 (Mathf.Pow(tValue, 3.0f) * position3);
     }
 
+    private void RenderArm()
+    {
+        float tValue = 0.0f;
+        float tIncrement = (1.0f / (float)this.armLine.positionCount);
+
+        for (int i = 0; i < this.armLine.positionCount; i++)
+        {
+            this.armLine.SetPosition(i, this.CalculateCurvePoint(tValue, 
+                                        this.bezierPoints[0].position, 
+                                        this.bezierPoints[1].position,
+                                        this.bezierPoints[2].position,
+                                        this.bezierPoints[3].position));
+
+            tValue += tIncrement;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         this.bezierPoints[0].position = this.playerEndpoint.position;
 
-        if (this.handEndpoint == null)
+        if (this.gameHandEndpoint == null)
         {
             this.bezierPoints[1].position = this.playerEndpoint.position;
             this.bezierPoints[2].position = this.playerEndpoint.position;
             this.bezierPoints[3].position = this.playerEndpoint.position;
+
+            this.armLine.positionCount = 0;
             return;
         }
 
-        this.bezierPoints[1].position = this.playerEndpoint.position + (this.lowerPointDistancePercentage * this.handEndpoint.position);
-        this.bezierPoints[2].position = this.playerEndpoint.position + (this.upperPointDistancePercentage * this.handEndpoint.position);
-        this.bezierPoints[3].position = this.handEndpoint.position;       
+        Vector3 originalLowerPointPosition = Vector3.Lerp(this.playerEndpoint.position, this.gameHandEndpoint.position, this.lowerPointDistancePercentage);
+        Vector3 originalUpperPointPosition = Vector3.Lerp(this.playerEndpoint.position, this.gameHandEndpoint.position, this.upperPointDistancePercentage);
+
+        this.bezierPoints[1].position = originalLowerPointPosition;
+        this.bezierPoints[2].position = originalUpperPointPosition;
+
+        this.bezierPoints[3].position = this.gameHandEndpoint.position;
+        
+        Vector3 lowerPointTargetDirection = Vector3.Slerp(this.gameHandEndpoint.position, 
+                                            this.metaHandTransform.position, 
+                                            this.lowerPointDeviation);
+
+        Vector3 upperPointTargetDirection = Vector3.Slerp(this.gameHandEndpoint.position,
+                                            this.metaHandTransform.position,
+                                            this.upperPointDeviation);
+
+        this.bezierPoints[1].position = Vector3.Lerp(this.playerEndpoint.position, lowerPointTargetDirection, this.lowerPointDistancePercentage);
+        this.bezierPoints[2].position = Vector3.Lerp(this.playerEndpoint.position, upperPointTargetDirection, this.upperPointDistancePercentage);
+
+        //Vector3 targetLowerPointVector = lowerPointTargetDirection * originalLowerPointPosition.magnitude;
+        //Vector3 targetUpperPointVector = upperPointTargetDirection * originalUpperPointPosition.magnitude;
+
+        //this.bezierPoints[1].position = targetLowerPointVector - this.playerEndpoint.position;
+        //this.bezierPoints[2].position = targetUpperPointVector - this.playerEndpoint.position;
+        
+        this.RenderArm();
     }
 }
