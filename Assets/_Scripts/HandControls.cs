@@ -7,6 +7,8 @@ public class HandControls : MonoBehaviour
     private PlayerControls controls;
 
     [SerializeField]
+    private Rigidbody handRb;
+    [SerializeField]
     private SpriteRenderer handSpriteRenderer;
     [SerializeField]
     private Sprite openHandSprite;
@@ -61,6 +63,12 @@ public class HandControls : MonoBehaviour
     {
         this.handSpriteRenderer.sprite = this.openHandSprite;
         this.handCollider.enabled = false;
+
+        if (this.grabbedObject != null)
+        {
+            this.grabbedObject.GetReleased(this.handRb.velocity);
+        }
+
         this.grabbedObject = null;
     }
 

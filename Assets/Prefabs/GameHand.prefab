@@ -62,6 +62,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1813ed3f83205b4d83c6888b910c020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handRb: {fileID: 1275053373}
   handSpriteRenderer: {fileID: 9191520168272649643}
   openHandSprite: {fileID: 21300000, guid: 363d52df1b180d54cb5b53b38d6b5dbf, type: 3}
   grabHandSprite: {fileID: 21300000, guid: 5040aef12471c7c4bad9617cf7813d43, type: 3}
