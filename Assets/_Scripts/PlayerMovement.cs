@@ -52,6 +52,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         if (this.moveVector.magnitude < this.analogDeadZoneMagnitude)
         {
             this.moveVector = Vector2.zero;
