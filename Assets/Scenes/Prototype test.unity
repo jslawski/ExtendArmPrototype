@@ -503,6 +503,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: c1e5ecc18791a5e41bbfc38ad5967c42, type: 2}
+    - target: {fileID: -7511558181221131132, guid: a7dc295df4fd1594788b5ab75b9a58ad, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: c1e5ecc18791a5e41bbfc38ad5967c42, type: 2}
     - target: {fileID: 919132149155446097, guid: a7dc295df4fd1594788b5ab75b9a58ad, type: 3}
       propertyPath: m_Name
       value: cliff_waterfall_stone (1)
@@ -844,7 +848,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -882,7 +886,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1091498749}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0ca94db6833a3943b8f58d8adbecae3, type: 3}
   m_Name: 
