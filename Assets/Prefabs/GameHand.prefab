@@ -70,6 +70,7 @@ MonoBehaviour:
   detectableLayer:
     serializedVersion: 2
     m_Bits: 8
+  maxQueueSize: 5
 --- !u!1 &9142106058759242143
 GameObject:
   m_ObjectHideFlags: 0

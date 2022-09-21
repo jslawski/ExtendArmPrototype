@@ -50,7 +50,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabbed: 0
   objectRb: {fileID: 0}
-  objectRenderer: {fileID: 8448873690252676874}
   maxSpeed: 100
 --- !u!33 &8448873690252676875
 MeshFilter:

@@ -22,9 +22,14 @@ public class HandControls : MonoBehaviour
     [SerializeField]
     private LayerMask detectableLayer;
 
+    private Queue<Vector3> velocityHistory;
+    [SerializeField, Range(0,30)]
+    private int maxQueueSize = 60;       
+
     private void Awake()
     {
         this.controls = new PlayerControls();
+        this.velocityHistory = new Queue<Vector3>();
     }
 
     // Start is called before the first frame update
@@ -66,7 +71,10 @@ public class HandControls : MonoBehaviour
 
         if (this.grabbedObject != null)
         {
-            this.grabbedObject.GetReleased(this.handRb.velocity);
+            Vector3[] finalVelocityHistsory = this.velocityHistory.ToArray();
+
+
+            this.grabbedObject.GetReleased(finalVelocityHistsory[0]);
         }
 
         this.grabbedObject = null;
@@ -75,7 +83,6 @@ public class HandControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     private void FixedUpdate()
@@ -83,6 +90,13 @@ public class HandControls : MonoBehaviour
         if (this.grabbedObject != null)
         {
             this.grabbedObject.objectRb.MovePosition(this.gameObject.transform.position);
+        }
+
+        this.velocityHistory.Enqueue(this.handRb.velocity);
+
+        if (this.velocityHistory.Count > this.maxQueueSize)
+        {
+            this.velocityHistory.Dequeue();
         }
     }
 

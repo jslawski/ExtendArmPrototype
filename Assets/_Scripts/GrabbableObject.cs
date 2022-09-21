@@ -13,11 +13,15 @@ public class GrabbableObject : MonoBehaviour
 
     public float maxSpeed;
 
+    private int grabbedLayer;
+    private int grabbableLayer;
+
     // Start is called before the first frame update
     void Start()
     {
         this.objectRb = GetComponent<Rigidbody>();
-        this.objectCollider = GetComponent<Collider>();
+        this.grabbedLayer = LayerMask.NameToLayer("Grabbed");
+        this.grabbableLayer = LayerMask.NameToLayer("Grabbable");
     }
 
     // Update is called once per frame
@@ -25,37 +29,41 @@ public class GrabbableObject : MonoBehaviour
     {
         Vector3 viewportPos = Camera.main.WorldToViewportPoint(this.gameObject.transform.position);
 
-        if (viewportPos.x <= 0.0f || viewportPos.x > 1.0f)
+        if (this.objectRb.velocity.magnitude <= 1 && this.grabbed == false)
         {
-            Destroy(this.gameObject);
-        }
-        if (viewportPos.y <= 0.0f || viewportPos.y > 1.0f)
-        {
-            Destroy(this.gameObject);
+            if (viewportPos.x <= 0.0f || viewportPos.x > 1.0f)
+            {
+                Destroy(this.gameObject);
+            }
+            if (viewportPos.y <= 0.0f || viewportPos.y > 1.0f)
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 
     public void GetGrabbed()
     {
         this.grabbed = true;
-        this.objectCollider.enabled = false;
+        this.gameObject.layer = this.grabbedLayer;
     }
 
     public void GetReleased(Vector3 handVelocity)
     {
         this.grabbed = false;        
         this.objectRb.velocity = handVelocity;
+        
 
         if (this.objectRb.velocity.magnitude > this.maxSpeed)
         {
             this.objectRb.velocity = handVelocity.normalized * this.maxSpeed;
         }
 
-        Invoke("DelayedColliderReEnable", 0.2f);
+        Invoke("DelayedLayerReset", 0.2f);
     }
 
-    private void DelayedColliderReEnable()
+    private void DelayedLayerReset()
     {
-        this.objectCollider.enabled = true;
+        this.gameObject.layer = this.grabbableLayer;
     }
 }

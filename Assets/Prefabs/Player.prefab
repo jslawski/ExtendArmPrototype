@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6909014596645995973}
   - component: {fileID: 6909014596645995977}
   - component: {fileID: 6909014596645995976}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6909014596690290313}
   - component: {fileID: 6909014596690290310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetaHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6909014596884888070}
   - component: {fileID: 6909014596884888073}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: point3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +314,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6909014596922105923}
   - component: {fileID: 6909014596922105922}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: point1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 6909014597394441238}
   - component: {fileID: 6909014597394441240}
   - component: {fileID: 6909014597394441243}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Extender
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -554,7 +554,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6909014597491675240}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BezierPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,7 +591,7 @@ GameObject:
   - component: {fileID: 6909014597939466277}
   - component: {fileID: 6909014597939466279}
   - component: {fileID: 6909014597939466276}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MetaArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -737,7 +737,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6909014598034904104}
   - component: {fileID: 6909014598034904107}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: point2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -821,7 +821,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6909014598373705626}
   - component: {fileID: 6909014598373705629}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: point0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
