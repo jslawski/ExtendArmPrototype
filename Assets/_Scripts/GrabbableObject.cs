@@ -24,7 +24,7 @@ public class GrabbableObject : MonoBehaviour
     void Update()
     {
         Vector3 viewportPos = Camera.main.WorldToViewportPoint(this.gameObject.transform.position);
-
+        /*
         if (viewportPos.x <= 0.0f || viewportPos.x > 1.0f)
         {
             Destroy(this.gameObject);
@@ -33,6 +33,7 @@ public class GrabbableObject : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+        */
     }
 
     public void GetGrabbed()
