@@ -11,8 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
     PlayerControls controls;
 
-    Vector2 moveVector = Vector3.zero;
-    Vector2 input = Vector2.zero;
+    Vector2 moveVector = Vector2.zero;
+    
 
     public float analogDeadZoneMagnitude = 0.3f;
 
