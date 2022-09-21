@@ -11,7 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
     PlayerControls controls;
 
-    Vector2 moveVector = Vector2.zero;
+    Vector2 moveVector = Vector3.zero;
+    Vector2 input = Vector2.zero;
 
     public float analogDeadZoneMagnitude = 0.3f;
 
@@ -40,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     {
         this.controls = new PlayerControls();
 
+ 
         this.controls.PlayerMap.Move.performed += context => this.moveVector = context.ReadValue<Vector2>();
         this.controls.PlayerMap.Move.canceled += context => this.moveVector = Vector2.zero;
 
@@ -52,6 +54,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        // 3d Move test
+        Vector3 m = new Vector3(moveVector.x, 0, moveVector.y) * Time.deltaTime*this.maxSpeed;
+        this.transform.Translate(m, Space.World);
+
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             Application.Quit();
@@ -68,8 +75,9 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Vector2 armDirection2D = (this.armDirection * this.maxArmDistance);
-        Vector3 directionVector = new Vector3(armDirection2D.x, armDirection2D.y, 0.0f);
-        this.armTargetPosition = this.transform.position + directionVector;
+        Vector3 directionVector = new Vector3(armDirection2D.x, 0.0f, armDirection2D.y);
+        this.armTargetPosition = this.transform.position + directionVector ;
+        //print(this.armTargetPosition);
 
         if (directionVector != Vector3.zero)
         {
@@ -92,22 +100,27 @@ public class PlayerMovement : MonoBehaviour
                 this.gameHandTargetPosition = Vector3.Lerp(this.gameHandRB.position,
                                            this.armTargetPosition,
                                            this.gameHandFollowSpeed * Time.fixedDeltaTime);
+
             }
+
         }
+
     }
 
     private void FixedUpdate()
     {
         Vector2 velocity2D = (this.moveVector * this.maxSpeed * Time.fixedDeltaTime);
-        Vector3 velocityVector = new Vector3(velocity2D.x, velocity2D.y, 0.0f);
+        Vector3 velocityVector = new Vector3(velocity2D.x, 0.0f, velocity2D.y);
         Vector3 newPosition = this.transform.position + velocityVector;        
 
         this.playerRB.MovePosition(newPosition);
 
         this.armHand.transform.position = this.armTargetPosition;
+        
 
         if (this.gameHandRB != null)
         {
+            print(true);
             this.gameHandRB.MovePosition(this.gameHandTargetPosition);
 
             if (Vector3.Distance(this.gameHandRB.position, this.armHand.transform.position) < 1.0f &&
