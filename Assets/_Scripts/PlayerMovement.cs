@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
                 this.armRender.SetupArmRenderer(this.gameHandRB.transform, this.armHand.transform);
             }
 
-            this.gameHandTargetPosition = Vector3.Lerp(this.gameHandRB.position,
+            this.gameHandTargetPosition = Vector3.Slerp(this.gameHandRB.position,
                                            this.armTargetPosition,
                                            this.gameHandFollowSpeed * Time.fixedDeltaTime);
         }        
@@ -97,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if (this.gameHandRB != null)
             {
-                this.gameHandTargetPosition = Vector3.Lerp(this.gameHandRB.position,
+                this.gameHandTargetPosition = Vector3.Slerp(this.gameHandRB.position,
                                            this.armTargetPosition,
                                            this.gameHandFollowSpeed * Time.fixedDeltaTime);
 
