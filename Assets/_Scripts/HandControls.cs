@@ -33,6 +33,12 @@ public class HandControls : MonoBehaviour
 
     private PlayerMovement player;
 
+    private bool grabbing = false;
+
+    private float forceCollisionPercentage = 1.0f;
+
+    public float analogDeadZoneMagnitude = 0.3f;
+
     private void Awake()
     {
         this.controls = new PlayerControls();
@@ -53,6 +59,12 @@ public class HandControls : MonoBehaviour
 
         this.controls.PlayerMap.Arm.performed += context => this.metaDirection = context.ReadValue<Vector2>();
         this.controls.PlayerMap.Arm.canceled += context => this.metaDirection = Vector2.zero;
+
+        /*if (this.controls.PlayerMap.Grab.() || this.controls.PlayerMap.Grab2.WasPerformedThisFrame())
+        {
+            this.InitiateGrab();
+        }
+        */
     }    
 
     private void OnDestroy()
@@ -75,24 +87,28 @@ public class HandControls : MonoBehaviour
         {
             return;
         }
-        
-        RaycastHit hitInfo;
 
-        Vector3 spherecastOrigin = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, -10f);
+        this.grabbing = true;
 
-        if (Physics.SphereCast(spherecastOrigin, 1.0f, Vector3.forward, out hitInfo, Mathf.Infinity, this.detectableLayer))
+        if (metaDirection.magnitude >= this.analogDeadZoneMagnitude)
         {
-            this.grabbedObject = hitInfo.rigidbody.gameObject.GetComponent<GrabbableObject>();
-            this.grabbedObject.GetGrabbed(this.handRb);
+            RaycastHit hitInfo;
 
-            if (this.grabbedObject.isStationary == true)
+            Vector3 spherecastOrigin = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, -10f);
+
+            if (Physics.SphereCast(spherecastOrigin, 1.0f, Vector3.forward, out hitInfo, Mathf.Infinity, this.detectableLayer))
             {
-                this.player.latched = true;
+                this.grabbedObject = hitInfo.rigidbody.gameObject.GetComponent<GrabbableObject>();
+                this.grabbedObject.GetGrabbed(this.handRb);
+
+                if (this.grabbedObject.isStationary == true)
+                {
+                    this.player.latched = true;
+                }
             }
         }
-        
-        this.handSpriteRenderer.sprite = this.grabHandSprite;
 
+        this.handSpriteRenderer.sprite = this.grabHandSprite;
         this.handCollider.enabled = true;
     }
 
@@ -112,12 +128,14 @@ public class HandControls : MonoBehaviour
 
                 this.handSpriteRenderer.sprite = this.openHandSprite;
                 this.handCollider.enabled = false;
+                this.grabbing = false;
             }
         }
         else
         {
             this.handSpriteRenderer.sprite = this.openHandSprite;
             this.handCollider.enabled = false;
+            this.grabbing = false;
         }
     }
 
@@ -133,6 +151,7 @@ public class HandControls : MonoBehaviour
 
         this.handSpriteRenderer.sprite = this.openHandSprite;
         this.handCollider.enabled = false;
+        this.grabbing = false;
 
         if (this.grabbedObject != null)
         {
@@ -146,6 +165,7 @@ public class HandControls : MonoBehaviour
 
         this.grabbedObject = null;
         this.throwingCoroutine = null;
+        this.grabbing = false;
     }
 
     private void ThrowDynamicObject()
@@ -210,7 +230,15 @@ public class HandControls : MonoBehaviour
     {
         if (other.tag == "GrabbableObject")
         {
-            //Do Something
+            if (this.grabbing == true && this.grabbedObject == null)
+            {
+                Rigidbody objectRb = other.gameObject.GetComponent<Rigidbody>();
+
+                Vector3 forceDirection = this.metaDirection.normalized;//(objectRb.position - this.handRb.position).normalized;
+                float forceMagnitude = (this.handRb.velocity.magnitude * this.forceCollisionPercentage) * objectRb.mass;
+
+                objectRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+            }
         }
     }
 }
