@@ -48,6 +48,9 @@ public class HandControls : MonoBehaviour
         this.controls.PlayerMap.Grab.performed += context => this.InitiateGrab();
         this.controls.PlayerMap.Grab.canceled += context => this.CancelGrab();
 
+        this.controls.PlayerMap.Grab2.performed += context => this.InitiateGrab();
+        this.controls.PlayerMap.Grab2.canceled += context => this.CancelGrab();
+
         this.controls.PlayerMap.Arm.performed += context => this.metaDirection = context.ReadValue<Vector2>();
         this.controls.PlayerMap.Arm.canceled += context => this.metaDirection = Vector2.zero;
     }    
@@ -57,6 +60,9 @@ public class HandControls : MonoBehaviour
         this.controls.PlayerMap.Grab.performed -= context => this.InitiateGrab();
         this.controls.PlayerMap.Grab.canceled -= context => this.CancelGrab();
 
+        this.controls.PlayerMap.Grab2.performed -= context => this.InitiateGrab();
+        this.controls.PlayerMap.Grab2.canceled -= context => this.CancelGrab();
+
         this.controls.PlayerMap.Arm.performed -= context => this.metaDirection = context.ReadValue<Vector2>();
         this.controls.PlayerMap.Arm.canceled -= context => this.metaDirection = Vector2.zero;
 
@@ -65,6 +71,11 @@ public class HandControls : MonoBehaviour
 
     private void InitiateGrab()
     {
+        if (this.handSpriteRenderer.sprite != this.openHandSprite)
+        {
+            return;
+        }
+        
         RaycastHit hitInfo;
 
         Vector3 spherecastOrigin = new Vector3(this.gameObject.transform.position.x, this.gameObject.transform.position.y, -10f);
@@ -72,7 +83,7 @@ public class HandControls : MonoBehaviour
         if (Physics.SphereCast(spherecastOrigin, 1.0f, Vector3.forward, out hitInfo, Mathf.Infinity, this.detectableLayer))
         {
             this.grabbedObject = hitInfo.rigidbody.gameObject.GetComponent<GrabbableObject>();
-            this.grabbedObject.GetGrabbed();
+            this.grabbedObject.GetGrabbed(this.handRb);
 
             if (this.grabbedObject.isStationary == true)
             {
@@ -178,11 +189,16 @@ public class HandControls : MonoBehaviour
                     this.velocityHistory.Dequeue();
                 }
             }
-            else
-            { 
-            
+        }
+        else
+        {
+            if (Vector3.Distance(this.handRb.position, this.player.armHand.transform.position) < 1.0f &&
+                    this.metaDirection == Vector2.zero)
+            {
+                Destroy(this.gameObject);
             }
         }
+        
     }
 
     private void OnEnable()

@@ -16,6 +16,10 @@ public class GrabbableObject : MonoBehaviour
 
     public bool isStationary = false;
 
+    private Rigidbody handRb;
+
+    private float forceCollisionPercentage = 0.75f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,10 +46,11 @@ public class GrabbableObject : MonoBehaviour
         }
     }
 
-    public void GetGrabbed()
+    public void GetGrabbed(Rigidbody hand)
     {
         this.grabbed = true;
         this.gameObject.layer = this.grabbedLayer;
+        this.handRb = hand;
     }
 
     public void GetReleased(Vector2 releaseDirection, float releaseSpeed)
@@ -72,5 +77,29 @@ public class GrabbableObject : MonoBehaviour
     private void LayerReset()
     {
         this.gameObject.layer = this.grabbableLayer;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.tag == "GrabbableObject")
+        {
+            Rigidbody otherRb = collision.gameObject.GetComponent<Rigidbody>();
+
+            Vector3 forceDirection = Vector3.zero;
+            float forceMagnitude = 0.0f;
+
+            if (this.grabbed == true)
+            {                
+                forceDirection = (otherRb.position - this.objectRb.position).normalized;
+                forceMagnitude = (this.handRb.velocity.magnitude * this.forceCollisionPercentage) * this.objectRb.mass;
+            }
+            else
+            {                
+                forceDirection = (otherRb.position - this.objectRb.position).normalized;
+                forceMagnitude = (this.objectRb.velocity.magnitude * this.forceCollisionPercentage) * this.objectRb.mass;
+            }
+
+            otherRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+        }
     }
 }

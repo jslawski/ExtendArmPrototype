@@ -20,8 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Range(0, 100)]
     private float maxArmDistance = 10f;
 
-    [SerializeField]
-    private GameObject armHand;
+    public GameObject armHand;
 
     private Vector3 armTargetPosition;
 
@@ -123,35 +122,22 @@ public class PlayerMovement : MonoBehaviour
         if (this.gameHandRB != null)
         {
             this.gameHandRB.MovePosition(this.gameHandTargetPosition);
-
-            if (Vector3.Distance(this.gameHandRB.position, this.armHand.transform.position) < 1.0f &&
-                this.armDirection == Vector2.zero)
-            {
-                Destroy(this.gameHandRB.gameObject);
-                this.gameHandRB = null;
-            }
         }
     }
 
     private void MoveLatched()
     {
-        //Vector2 velocity2D = (this.moveVector * this.maxSpeed * Time.fixedDeltaTime);
-        //Vector3 velocityVector = new Vector3(velocity2D.x, velocity2D.y, 0.0f);
-        //Vector3 newPosition = this.transform.position + velocityVector;
-
-
-        //Vector3 objectToPlayerDirection = (this.playerRB.position - this.a.position).normalized;
-
         Vector3 armOffset = new Vector3(-this.armDirection.x, -this.armDirection.y, 0.0f).normalized * (this.armDirection.magnitude * this.maxArmDistance);
 
-        Vector3 newPosition = (this.gameHandRB.position + armOffset);
+        Vector3 targetPosition = (this.gameHandRB.position + armOffset);
+
+        Vector3 newPosition = Vector3.Lerp(this.playerRB.position,
+                                           targetPosition,
+                                           this.gameHandFollowSpeed * Time.fixedDeltaTime);
 
         this.armHand.transform.position = this.armTargetPosition;
 
         this.playerRB.MovePosition(newPosition);
-
-
-
     }
 
     private void OnEnable()
