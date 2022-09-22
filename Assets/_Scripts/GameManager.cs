@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         if (this.currentSmallGrabbableObject == null)
         {
             this.currentSmallGrabbableObject = Instantiate(this.grabbableObjectPrefabs[0], 
-                new Vector3(-5.0f, 3.0f, 0.0f), new Quaternion());
+                new Vector3(-5.0f, 0.0f, 0.0f), new Quaternion());
         }
 
         if (this.currentMedGrabbableObject == null)
@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         if (this.currentBigGrabbableObject == null)
         {
             this.currentBigGrabbableObject = Instantiate(this.grabbableObjectPrefabs[2],
-                new Vector3(5.0f, 3.0f, 0.0f), new Quaternion());
+                new Vector3(5.0f, 0.0f, 0.0f), new Quaternion());
         }
     }
 

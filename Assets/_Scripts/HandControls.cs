@@ -27,6 +27,8 @@ public class HandControls : MonoBehaviour
     [SerializeField, Range(0,30)]
     private int maxQueueSize = 0;
 
+    private int frameDelay = 3;
+
     private Vector2 metaDirection = Vector2.zero;
 
     private Coroutine throwingCoroutine = null;
@@ -143,7 +145,7 @@ public class HandControls : MonoBehaviour
     {
         int delayFrames = 0;
 
-        while (delayFrames < this.maxQueueSize)
+        while (delayFrames < this.frameDelay)
         {
             delayFrames++;
             yield return new WaitForFixedUpdate();
