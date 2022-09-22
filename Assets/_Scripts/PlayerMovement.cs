@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private BezierArmRenderer armRender;
 
+    public bool latched = false;
+
     void Awake()
     {
         this.controls = new PlayerControls();
@@ -98,9 +100,21 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (this.latched == false)
+        {
+            this.MoveFreely();
+        }
+        else
+        {
+            this.MoveLatched();
+        }
+    }
+
+    private void MoveFreely()
+    {
         Vector2 velocity2D = (this.moveVector * this.maxSpeed * Time.fixedDeltaTime);
         Vector3 velocityVector = new Vector3(velocity2D.x, velocity2D.y, 0.0f);
-        Vector3 newPosition = this.transform.position + velocityVector;        
+        Vector3 newPosition = this.transform.position + velocityVector;
 
         this.playerRB.MovePosition(newPosition);
 
@@ -117,6 +131,27 @@ public class PlayerMovement : MonoBehaviour
                 this.gameHandRB = null;
             }
         }
+    }
+
+    private void MoveLatched()
+    {
+        //Vector2 velocity2D = (this.moveVector * this.maxSpeed * Time.fixedDeltaTime);
+        //Vector3 velocityVector = new Vector3(velocity2D.x, velocity2D.y, 0.0f);
+        //Vector3 newPosition = this.transform.position + velocityVector;
+
+
+        //Vector3 objectToPlayerDirection = (this.playerRB.position - this.a.position).normalized;
+
+        Vector3 armOffset = new Vector3(-this.armDirection.x, -this.armDirection.y, 0.0f).normalized * (this.armDirection.magnitude * this.maxArmDistance);
+
+        Vector3 newPosition = (this.gameHandRB.position + armOffset);
+
+        this.armHand.transform.position = this.armTargetPosition;
+
+        this.playerRB.MovePosition(newPosition);
+
+
+
     }
 
     private void OnEnable()

@@ -9,12 +9,12 @@ public class GrabbableObject : MonoBehaviour
     [HideInInspector]
     public Rigidbody objectRb;
 
-    private Collider objectCollider;
-
     public float maxSpeed;
 
     private int grabbedLayer;
     private int grabbableLayer;
+
+    public bool isStationary = false;
 
     // Start is called before the first frame update
     void Start()
@@ -48,21 +48,28 @@ public class GrabbableObject : MonoBehaviour
         this.gameObject.layer = this.grabbedLayer;
     }
 
-    public void GetReleased(Vector3 handVelocity)
+    public void GetReleased(Vector2 releaseDirection, float releaseSpeed)
     {
-        this.grabbed = false;        
-        this.objectRb.velocity = handVelocity;
-        
+        this.grabbed = false;
 
-        if (this.objectRb.velocity.magnitude > this.maxSpeed)
+        if (this.isStationary == false)
         {
-            this.objectRb.velocity = handVelocity.normalized * this.maxSpeed;
-        }
+            this.objectRb.velocity = new Vector3(releaseDirection.x, releaseDirection.y, 0.0f).normalized * releaseSpeed;
 
-        Invoke("DelayedLayerReset", 0.2f);
+            if (this.objectRb.velocity.magnitude > this.maxSpeed)
+            {
+                this.objectRb.velocity = releaseDirection.normalized * this.maxSpeed;
+            }
+
+            Invoke("LayerReset", 0.2f);
+        }
+        else
+        {
+            this.LayerReset();
+        }
     }
 
-    private void DelayedLayerReset()
+    private void LayerReset()
     {
         this.gameObject.layer = this.grabbableLayer;
     }

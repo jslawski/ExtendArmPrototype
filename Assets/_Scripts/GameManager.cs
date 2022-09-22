@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using TMPro;
+
+public enum ThrowMode { Delay, Anticipate }
+
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
@@ -10,6 +14,11 @@ public class GameManager : MonoBehaviour
     private GameObject currentSmallGrabbableObject;
     private GameObject currentMedGrabbableObject;
     private GameObject currentBigGrabbableObject;
+
+    public static ThrowMode throwingMode = ThrowMode.Anticipate;
+
+    [SerializeField]
+    private TextMeshProUGUI throwModeLabel;
 
     private void Update()
     {
@@ -30,5 +39,21 @@ public class GameManager : MonoBehaviour
             this.currentBigGrabbableObject = Instantiate(this.grabbableObjectPrefabs[2],
                 new Vector3(5.0f, 3.0f, 0.0f), new Quaternion());
         }
-    }    
+    }
+
+    public void ChangeThrowMode()
+    {
+        switch (throwingMode)
+        {
+            case ThrowMode.Delay:
+                throwingMode = ThrowMode.Anticipate;
+                this.throwModeLabel.text = "Mode B Active";
+                break;
+            case ThrowMode.Anticipate:
+                throwingMode = ThrowMode.Delay;
+                this.throwModeLabel.text = "Mode A Active";
+                break;
+
+        }
+    }
 }
