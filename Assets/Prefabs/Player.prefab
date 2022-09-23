@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6909014596645995976}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,6 +120,7 @@ MonoBehaviour:
   gameHandPrefab: {fileID: 3158098121795263002, guid: fcfad91a635affb43bcb44107c51d6cd, type: 3}
   gameHandFollowSpeed: 10
   armRender: {fileID: 6909014597394441243}
+  latched: 0
 --- !u!54 &6909014596645995976
 Rigidbody:
   m_ObjectHideFlags: 0

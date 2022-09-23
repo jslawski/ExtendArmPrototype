@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {       
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             Application.Quit();
@@ -98,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
+    {        
         if (this.latched == false)
         {
             this.MoveFreely();
@@ -143,5 +143,25 @@ public class PlayerMovement : MonoBehaviour
     private void OnEnable()
     {
         this.controls.PlayerMap.Enable();
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (this.latched == false && collision.gameObject.tag == "DestroyCollider")
+        {
+            Vector3 moveDirection = collision.GetContact(0).normal.normalized;
+
+            Vector2 velocity2D = (this.moveVector * this.maxSpeed * Time.fixedDeltaTime);
+            Vector3 velocityVector = new Vector3(velocity2D.x, velocity2D.y, 0.0f);
+
+            if (velocityVector.magnitude > 0)
+            {
+                this.playerRB.position += (moveDirection * velocityVector.magnitude);
+            }
+            else
+            {
+                this.playerRB.position += moveDirection;
+            }
+        }
     }
 }

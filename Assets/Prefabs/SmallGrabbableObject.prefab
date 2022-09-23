@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be5cfab34736414ca8af61602c4fc14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  respawnablePrefab: {fileID: 8448873690252676879}
   grabbed: 0
   objectRb: {fileID: 0}
   maxSpeed: 100

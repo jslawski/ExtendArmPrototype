@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GrabbableObject
   - PlayerHand
+  - DestroyCollider
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GrabbableObject : MonoBehaviour
 {
+    [HideInInspector]
     public bool grabbed = false;
 
     [HideInInspector]
@@ -20,12 +21,18 @@ public class GrabbableObject : MonoBehaviour
 
     private float forceCollisionPercentage = 0.75f;
 
+    private Vector3 spawnPoint = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
         this.objectRb = GetComponent<Rigidbody>();
         this.grabbedLayer = LayerMask.NameToLayer("Grabbed");
         this.grabbableLayer = LayerMask.NameToLayer("Grabbable");
+
+        this.gameObject.layer = this.grabbableLayer;
+
+        this.spawnPoint = this.transform.position;
     }
 
     // Update is called once per frame
@@ -103,6 +110,20 @@ public class GrabbableObject : MonoBehaviour
             }
 
             otherRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (this.grabbed == false && collision.collider.tag == "DestroyCollider")
+        {
+            /*GameObject newObject = Instantiate(this.gameObject, this.spawnPoint, new Quaternion());
+            newObject.name = this.gameObject.name;
+            Destroy(this.gameObject);
+            */
+
+            this.gameObject.transform.position = this.spawnPoint;
+            this.objectRb.velocity = Vector3.zero;
         }
     }
 }

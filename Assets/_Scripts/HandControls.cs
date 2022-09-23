@@ -190,7 +190,7 @@ public class HandControls : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (this.grabbedObject != null)
         {
