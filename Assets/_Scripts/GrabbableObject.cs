@@ -29,8 +29,10 @@ public class GrabbableObject : MonoBehaviour
     }
 
     // Update is called once per frame
+    
     void Update()
     {
+        /*
         Vector3 viewportPos = Camera.main.WorldToViewportPoint(this.gameObject.transform.position);
 
         if (this.objectRb.velocity.magnitude <= 1 && this.grabbed == false)
@@ -44,8 +46,9 @@ public class GrabbableObject : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
+        */
     }
-
+    
     public void GetGrabbed(Rigidbody hand)
     {
         this.grabbed = true;
