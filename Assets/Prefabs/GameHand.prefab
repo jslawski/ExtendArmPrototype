@@ -70,8 +70,8 @@ MonoBehaviour:
   detectableLayer:
     serializedVersion: 2
     m_Bits: 8
-  maxQueueSize: 3
-  throwingMode: 1
+  maxQueueSize: 5
+  analogDeadZoneMagnitude: 0.3
 --- !u!1 &9142106058759242143
 GameObject:
   m_ObjectHideFlags: 0
