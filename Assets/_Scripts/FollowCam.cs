@@ -36,6 +36,12 @@ public class FollowCam : MonoBehaviour
     {
         offset = transform.position - target.position;
 
+        this.cameraHolderTransform.position = new Vector3(this.target.position.x, this.target.position.y, -this.topDownCameraZDistance);
+        this.cameraHolderTransform.rotation = Quaternion.Euler(Vector3.zero);
+        this.cameraTransform.rotation = Quaternion.Euler(Vector3.zero);
+
+        this.currentMode = CameraMode.TopDown;
+
         this.controls = new PlayerControls();
         this.controls.PlayerMap.ToggleCamera.performed += context => this.ToggleCamera();
     }
