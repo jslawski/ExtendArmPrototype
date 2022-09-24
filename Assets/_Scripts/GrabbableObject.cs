@@ -54,6 +54,11 @@ public class GrabbableObject : MonoBehaviour
             }
         }
         */
+
+        if (this.objectRb.velocity.magnitude > this.maxSpeed)
+        {
+            this.objectRb.velocity = this.objectRb.velocity.normalized * this.maxSpeed;
+        }
     }
     
     public void GetGrabbed(Rigidbody hand)
