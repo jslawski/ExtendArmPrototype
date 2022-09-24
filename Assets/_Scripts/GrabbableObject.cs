@@ -66,11 +66,13 @@ public class GrabbableObject : MonoBehaviour
         this.grabbed = true;
         this.gameObject.layer = this.grabbedLayer;
         this.handRb = hand;
+        this.objectRb.isKinematic = true;
     }
 
     public void GetReleased(Vector2 releaseDirection, float releaseSpeed)
     {
         this.grabbed = false;
+        this.objectRb.isKinematic = false;
 
         if (this.isStationary == false)
         {
@@ -92,6 +94,31 @@ public class GrabbableObject : MonoBehaviour
     private void LayerReset()
     {
         this.gameObject.layer = this.grabbableLayer;
+    }
+
+    private void PreventObjectMovement(ContactPoint impedingContact)
+    {
+        Debug.LogError("Preventin' movement");
+
+        if (impedingContact.separation < 0)
+        {
+            this.objectRb.position += (impedingContact.normal.normalized * Mathf.Abs(impedingContact.separation));
+            this.handRb.position += (impedingContact.normal.normalized * Mathf.Abs(impedingContact.separation));
+
+            this.objectRb.velocity = Vector3.zero;
+            this.handRb.velocity = Vector3.zero;
+        }
+    }
+
+    private void ReflectObject(Vector3 collisionNormal)
+    {
+        this.objectRb.velocity = this.objectRb.velocity - (2 * Vector3.Dot(this.objectRb.velocity, collisionNormal) * collisionNormal);
+
+        //Vector3 reflectionForce = this.objectRb.velocity - (2 * Vector3.Dot(this.objectRb.velocity, collisionNormal) * collisionNormal);
+
+        //Debug.LogError("Reflectin");
+
+        //this.objectRb.AddForce(5* reflectionForce, ForceMode.Impulse);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -116,6 +143,11 @@ public class GrabbableObject : MonoBehaviour
 
             otherRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
         }
+
+        if (collision.collider.tag == "Wall" && this.grabbed == false)
+        {
+            this.ReflectObject(collision.GetContact(0).normal);
+        }
     }
 
     private void OnCollisionStay(Collision collision)
@@ -126,12 +158,13 @@ public class GrabbableObject : MonoBehaviour
             this.objectRb.velocity = Vector3.zero;
         }
 
-        if (collision.collider.tag == "Wall")
+        if (collision.gameObject.tag == "Wall")
         {
             if (this.grabbed == true)
-            { 
-            
+            {
+                this.PreventObjectMovement(collision.GetContact(0));
             }
         }
+
     }
 }

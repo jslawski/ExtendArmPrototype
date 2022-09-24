@@ -153,6 +153,7 @@ public class PlayerMovement : MonoBehaviour
         if (impedingContact.separation < 0)
         {
             this.playerRB.position += (impedingContact.normal.normalized * Mathf.Abs(impedingContact.separation));
+            this.playerRB.velocity = Vector3.zero;
         }
     }
 

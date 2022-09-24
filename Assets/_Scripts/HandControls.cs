@@ -233,6 +233,7 @@ public class HandControls : MonoBehaviour
         if (impedingContact.separation < 0)
         {
             this.handRb.position += (impedingContact.normal.normalized * Mathf.Abs(impedingContact.separation));
+            this.handRb.velocity = Vector3.zero;
         }
     }
 
@@ -254,7 +255,7 @@ public class HandControls : MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.tag == "Wall")
+        if (collision.gameObject.tag == "Wall" && this.grabbedObject == null)
         {
             this.PreventHandMovement(collision.GetContact(0));
         }
