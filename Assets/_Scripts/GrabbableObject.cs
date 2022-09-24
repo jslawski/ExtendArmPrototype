@@ -10,10 +10,13 @@ public class GrabbableObject : MonoBehaviour
     [HideInInspector]
     public Rigidbody objectRb;
 
-    public float maxSpeed;
+    private float maxSpeed = 50f;
 
     private int grabbedLayer;
     private int grabbableLayer;
+    
+    [SerializeField]
+    private LayerMask wallLayer;
 
     public bool isStationary = false;
 
@@ -22,6 +25,8 @@ public class GrabbableObject : MonoBehaviour
     private float forceCollisionPercentage = 0.75f;
 
     private Vector3 spawnPoint = Vector3.zero;
+
+    private SphereCollider objectCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +38,8 @@ public class GrabbableObject : MonoBehaviour
         this.gameObject.layer = this.grabbableLayer;
 
         this.spawnPoint = this.transform.position;
+
+        this.objectCollider = GetComponent<SphereCollider>();
     }
 
     // Update is called once per frame
@@ -54,6 +61,11 @@ public class GrabbableObject : MonoBehaviour
             }
         }
         */
+
+        if (this.objectRb.velocity.magnitude > this.maxSpeed)
+        {
+            this.objectRb.velocity = this.objectRb.velocity.normalized * this.maxSpeed;
+        }
     }
     
     public void GetGrabbed(Rigidbody hand)
@@ -61,11 +73,13 @@ public class GrabbableObject : MonoBehaviour
         this.grabbed = true;
         this.gameObject.layer = this.grabbedLayer;
         this.handRb = hand;
+        this.objectRb.isKinematic = true;        
     }
 
     public void GetReleased(Vector2 releaseDirection, float releaseSpeed)
     {
         this.grabbed = false;
+        this.objectRb.isKinematic = false;
 
         if (this.isStationary == false)
         {
@@ -89,6 +103,32 @@ public class GrabbableObject : MonoBehaviour
         this.gameObject.layer = this.grabbableLayer;
     }
 
+    private void PreventObjectMovement(ContactPoint impedingContact)
+    {
+        if (impedingContact.separation < 0)
+        {
+            this.objectRb.position += (impedingContact.normal.normalized * Mathf.Abs(impedingContact.separation));           
+            this.objectRb.velocity = Vector3.zero;
+            
+            if (this.handRb != null)
+            {
+                this.handRb.position += (impedingContact.normal.normalized * Mathf.Abs(impedingContact.separation));
+                this.handRb.velocity = Vector3.zero;
+            }
+        }
+    }
+
+    private void ReflectObject(Vector3 collisionNormal)
+    {
+        this.objectRb.velocity = this.objectRb.velocity - (2 * Vector3.Dot(this.objectRb.velocity, collisionNormal) * collisionNormal);
+
+        //Vector3 reflectionForce = this.objectRb.velocity - (2 * Vector3.Dot(this.objectRb.velocity, collisionNormal) * collisionNormal);
+
+        //Debug.LogError("Reflectin");
+
+        //this.objectRb.AddForce(5* reflectionForce, ForceMode.Impulse);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag == "GrabbableObject")
@@ -110,6 +150,31 @@ public class GrabbableObject : MonoBehaviour
             }
 
             otherRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+
+            Debug.LogError("DRAW!");
+            StartCoroutine(this.DrawThingy(forceDirection));
+            float raycastLength = ((this.objectCollider.radius * this.gameObject.transform.localScale.x) + 0.5f);
+            if (Physics.Raycast(this.transform.position, forceDirection, raycastLength, this.wallLayer))
+            {
+                Debug.LogError("NotApplyingForce!");
+            }            
+        }
+
+        if (collision.collider.tag == "Wall" && this.grabbed == false)
+        {
+            this.ReflectObject(collision.GetContact(0).normal);
+        }
+    }
+
+    private IEnumerator DrawThingy(Vector3 forceDirection)
+    {
+        float duration = 0f;
+        while (duration < 10f)
+        {
+            float magnitude = ((this.objectCollider.radius * this.gameObject.transform.localScale.x) + 0.5f);
+            Debug.DrawRay(this.transform.position, -forceDirection * magnitude, Color.green);
+            duration += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
     }
 
@@ -117,13 +182,18 @@ public class GrabbableObject : MonoBehaviour
     {
         if (this.grabbed == false && collision.collider.tag == "DestroyCollider")
         {
-            /*GameObject newObject = Instantiate(this.gameObject, this.spawnPoint, new Quaternion());
-            newObject.name = this.gameObject.name;
-            Destroy(this.gameObject);
-            */
-
             this.gameObject.transform.position = this.spawnPoint;
             this.objectRb.velocity = Vector3.zero;
         }
+
+        if (collision.gameObject.tag == "Wall")
+        {
+            if (this.grabbed == true)
+            {
+                this.PreventObjectMovement(collision.GetContact(0));
+            }
+
+        }
+
     }
 }

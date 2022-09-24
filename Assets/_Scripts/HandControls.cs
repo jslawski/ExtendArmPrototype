@@ -17,6 +17,7 @@ public class HandControls : MonoBehaviour
     [SerializeField]
     private BoxCollider handCollider;
 
+    [SerializeField]
     private GrabbableObject grabbedObject;
 
     [SerializeField]
@@ -228,6 +229,15 @@ public class HandControls : MonoBehaviour
         this.controls.PlayerMap.Enable();
     }
 
+    private void PreventHandMovement(ContactPoint impedingContact)
+    {
+        if (impedingContact.separation < 0)
+        {
+            this.handRb.position += (impedingContact.normal.normalized * Mathf.Abs(impedingContact.separation));
+            this.handRb.velocity = Vector3.zero;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "GrabbableObject")
@@ -241,6 +251,14 @@ public class HandControls : MonoBehaviour
 
                 objectRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
             }
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Wall" && this.grabbedObject == null)
+        {
+            this.PreventHandMovement(collision.GetContact(0));
         }
     }
 }
