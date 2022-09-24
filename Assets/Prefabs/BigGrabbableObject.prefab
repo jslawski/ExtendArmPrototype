@@ -50,6 +50,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabbed: 0
   objectRb: {fileID: 0}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   isStationary: 0
 --- !u!33 &8448873690252676875
 MeshFilter:

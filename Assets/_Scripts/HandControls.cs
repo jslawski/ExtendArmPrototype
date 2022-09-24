@@ -17,6 +17,7 @@ public class HandControls : MonoBehaviour
     [SerializeField]
     private BoxCollider handCollider;
 
+    [SerializeField]
     private GrabbableObject grabbedObject;
 
     [SerializeField]
