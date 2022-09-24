@@ -122,13 +122,16 @@ public class GrabbableObject : MonoBehaviour
     {
         if (this.grabbed == false && collision.collider.tag == "DestroyCollider")
         {
-            /*GameObject newObject = Instantiate(this.gameObject, this.spawnPoint, new Quaternion());
-            newObject.name = this.gameObject.name;
-            Destroy(this.gameObject);
-            */
-
             this.gameObject.transform.position = this.spawnPoint;
             this.objectRb.velocity = Vector3.zero;
+        }
+
+        if (collision.collider.tag == "Wall")
+        {
+            if (this.grabbed == true)
+            { 
+            
+            }
         }
     }
 }
