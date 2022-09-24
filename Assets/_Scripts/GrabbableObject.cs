@@ -10,7 +10,7 @@ public class GrabbableObject : MonoBehaviour
     [HideInInspector]
     public Rigidbody objectRb;
 
-    public float maxSpeed;
+    private float maxSpeed = 50f;
 
     private int grabbedLayer;
     private int grabbableLayer;

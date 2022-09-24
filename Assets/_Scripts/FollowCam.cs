@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum CameraMode { TopDown, Isometric }
+
 public class FollowCam : MonoBehaviour
 {
     [SerializeField]
@@ -24,8 +26,8 @@ public class FollowCam : MonoBehaviour
     public Vector3 isometricCameraHolderRotation;
     public Vector3 isometricCameraRotation;
 
-    private enum CameraMode { TopDown, Isometric }
-    private CameraMode currentMode = CameraMode.TopDown;
+    
+    public static CameraMode currentMode = CameraMode.TopDown;
 
     [SerializeField, Range(0f, 10f)]
     private float cameraMoveSpeed = 3.0f;
@@ -40,7 +42,7 @@ public class FollowCam : MonoBehaviour
         this.cameraHolderTransform.rotation = Quaternion.Euler(Vector3.zero);
         this.cameraTransform.rotation = Quaternion.Euler(Vector3.zero);
 
-        this.currentMode = CameraMode.TopDown;
+        FollowCam.currentMode = CameraMode.TopDown;
 
         this.controls = new PlayerControls();
         this.controls.PlayerMap.ToggleCamera.performed += context => this.ToggleCamera();
@@ -48,7 +50,7 @@ public class FollowCam : MonoBehaviour
 
     private void ToggleCamera()
     {
-        if (this.currentMode == CameraMode.TopDown)
+        if (FollowCam.currentMode == CameraMode.TopDown)
         {
             //Switch to isometric
             this.cameraHolderTransform.position = new Vector3(this.target.position.x + this.isometricPositionOffset.x,
@@ -57,7 +59,7 @@ public class FollowCam : MonoBehaviour
             this.cameraHolderTransform.rotation = Quaternion.Euler(this.isometricCameraHolderRotation);
             this.cameraTransform.localRotation = Quaternion.Euler(this.isometricCameraRotation);
 
-            this.currentMode = CameraMode.Isometric;
+            FollowCam.currentMode = CameraMode.Isometric;
         }
         else
         {
@@ -66,7 +68,7 @@ public class FollowCam : MonoBehaviour
             this.cameraHolderTransform.rotation = Quaternion.Euler(Vector3.zero);
             this.cameraTransform.rotation = Quaternion.Euler(Vector3.zero);
 
-            this.currentMode = CameraMode.TopDown;
+            FollowCam.currentMode = CameraMode.TopDown;
         }
     }
 

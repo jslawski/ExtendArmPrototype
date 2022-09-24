@@ -32,6 +32,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Range(0, 500)]
     float gameHandFollowSpeed = 0.0f;
 
+    [SerializeField, Range(0, 500)]
+    float latchedPlayerFollowSpeed = 5.0f;
+
     [SerializeField]
     private BezierArmRenderer armRender;
 
@@ -133,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 newPosition = Vector3.Lerp(this.playerRB.position,
                                            targetPosition,
-                                           this.gameHandFollowSpeed * Time.fixedDeltaTime);
+                                           this.latchedPlayerFollowSpeed * Time.fixedDeltaTime);
 
         this.armHand.transform.position = this.armTargetPosition;
 
@@ -145,23 +148,25 @@ public class PlayerMovement : MonoBehaviour
         this.controls.PlayerMap.Enable();
     }
 
+    private void PreventPlayerMovement(ContactPoint impedingContact)
+    {        
+        if (impedingContact.separation < 0)
+        {
+            this.playerRB.position += (impedingContact.normal.normalized * Mathf.Abs(impedingContact.separation));
+        }
+    }
+
     private void OnCollisionStay(Collision collision)
     {
         if (this.latched == false && collision.gameObject.tag == "DestroyCollider")
         {
-            Vector3 moveDirection = collision.GetContact(0).normal.normalized;
+            
+            this.PreventPlayerMovement(collision.GetContact(0));
+        }
 
-            Vector2 velocity2D = (this.moveVector * this.maxSpeed * Time.fixedDeltaTime);
-            Vector3 velocityVector = new Vector3(velocity2D.x, velocity2D.y, 0.0f);
-
-            if (velocityVector.magnitude > 0)
-            {
-                this.playerRB.position += (moveDirection * velocityVector.magnitude);
-            }
-            else
-            {
-                this.playerRB.position += moveDirection;
-            }
+        if (collision.gameObject.tag == "Wall")
+        {
+            this.PreventPlayerMovement(collision.GetContact(0));
         }
     }
 }
