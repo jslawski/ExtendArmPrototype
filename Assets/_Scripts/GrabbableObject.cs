@@ -23,6 +23,7 @@ public class GrabbableObject : MonoBehaviour
     private Rigidbody handRb;
 
     private float forceCollisionPercentage = 0.3f;
+    private float bodyForceCollisionPercentage = 0.75f;
 
     private Vector3 spawnPoint = Vector3.zero;
 
@@ -130,7 +131,7 @@ public class GrabbableObject : MonoBehaviour
             else
             {                
                 forceDirection = (otherRb.position - this.objectRb.position).normalized;
-                forceMagnitude = (this.objectRb.velocity.magnitude * this.forceCollisionPercentage) * this.objectRb.mass;
+                forceMagnitude = (this.objectRb.velocity.magnitude * this.bodyForceCollisionPercentage) * this.objectRb.mass;
             }
 
             otherRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
