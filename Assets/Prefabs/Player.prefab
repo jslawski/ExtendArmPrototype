@@ -1081,3 +1081,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHand: 0
+  isPlayer: 1

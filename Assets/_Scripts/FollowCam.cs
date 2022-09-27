@@ -45,11 +45,22 @@ public class FollowCam : MonoBehaviour
         FollowCam.currentMode = CameraMode.TopDown;
 
         this.controls = new PlayerControls();
+        
         this.controls.PlayerMap.ToggleCamera.performed += context => this.ToggleCamera();
+    }
+
+    private void OnDestroy()
+    {
+        this.controls.Disable();
     }
 
     private void ToggleCamera()
     {
+        if (this.cameraHolderTransform == null)
+        {
+            return;
+        }
+        
         if (FollowCam.currentMode == CameraMode.TopDown)
         {
             //Switch to isometric

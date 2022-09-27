@@ -40,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool latched = false;
 
+    private GameObject instructionsObject;
+
     void Awake()
     {
         this.controls = new PlayerControls();
@@ -51,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
         this.controls.PlayerMap.Arm.canceled += context => this.armDirection = Vector2.zero;
 
         this.playerRB = GetComponent<Rigidbody>();
+
+        this.instructionsObject = GameObject.Find("Instructions");
     }
 
     // Update is called once per frame
@@ -59,6 +63,11 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             Application.Quit();
+        }
+
+        if (this.instructionsObject.activeSelf == true)
+        {
+            return;
         }
 
         if (this.moveVector.magnitude < this.analogDeadZoneMagnitude)
@@ -170,5 +179,10 @@ public class PlayerMovement : MonoBehaviour
         {
             this.PreventPlayerMovement(collision.GetContact(0));
         }
+    }
+
+    private void OnDestroy()
+    {
+        this.controls.Disable();
     }
 }

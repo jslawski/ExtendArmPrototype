@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BillboardSprite : MonoBehaviour
 {
-    public bool isHand = false;    
+    public bool isHand = false;
+    public bool isPlayer = false;
 
     // Update is called once per frame
     void LateUpdate()
@@ -15,9 +16,18 @@ public class BillboardSprite : MonoBehaviour
         
         if (FollowCam.currentMode == CameraMode.Isometric)
         {
-            this.gameObject.transform.rotation = Quaternion.Euler(this.gameObject.transform.rotation.eulerAngles.x,
-                                                              this.gameObject.transform.rotation.eulerAngles.y,
-                                                              this.gameObject.transform.rotation.eulerAngles.z + 12);
+            if (this.isPlayer == true)
+            {
+                this.gameObject.transform.rotation = Quaternion.Euler(this.gameObject.transform.rotation.eulerAngles.x,
+                                                                  this.gameObject.transform.rotation.eulerAngles.y,
+                                                                  this.gameObject.transform.rotation.eulerAngles.z + 15);
+            }
+            else 
+            {
+                this.gameObject.transform.rotation = Quaternion.Euler(this.gameObject.transform.rotation.eulerAngles.x,
+                                                                      this.gameObject.transform.rotation.eulerAngles.y,
+                                                                      this.gameObject.transform.rotation.eulerAngles.z + 20);
+            }
         }        
 
         if (this.isHand == true)
