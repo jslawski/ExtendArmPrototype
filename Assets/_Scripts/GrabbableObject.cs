@@ -29,6 +29,13 @@ public class GrabbableObject : MonoBehaviour
 
     private SphereCollider objectCollider;
 
+    [SerializeField]
+    private AudioSource wallBounceSound;
+    [SerializeField]
+    private AudioSource objectBounceSound;
+    [SerializeField]
+    private AudioClip destroyObjectSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -106,12 +113,6 @@ public class GrabbableObject : MonoBehaviour
     private void ReflectObject(Vector3 collisionNormal)
     {
         this.objectRb.velocity = this.objectRb.velocity - (2 * Vector3.Dot(this.objectRb.velocity, collisionNormal) * collisionNormal);
-
-        //Vector3 reflectionForce = this.objectRb.velocity - (2 * Vector3.Dot(this.objectRb.velocity, collisionNormal) * collisionNormal);
-
-        //Debug.LogError("Reflectin");
-
-        //this.objectRb.AddForce(5* reflectionForce, ForceMode.Impulse);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -139,14 +140,21 @@ public class GrabbableObject : MonoBehaviour
             //StartCoroutine(this.DrawThingy(forceDirection));
             //float raycastLength = ((this.objectCollider.radius * this.gameObject.transform.localScale.x) + 0.5f);
             //if (Physics.Raycast(this.transform.position, forceDirection, raycastLength, this.wallLayer))
-           // {
-           //     Debug.LogError("NotApplyingForce!");
-           // }            
+            // {
+            //     Debug.LogError("NotApplyingForce!");
+            // }
+            // 
+
+            this.objectBounceSound.pitch = Mathf.Lerp(1.8f, 1.0f, this.objectRb.mass / 3.0f);
+            this.objectBounceSound.Play();
         }
 
         if (collision.collider.tag == "Wall" && this.grabbed == false)
         {
             this.ReflectObject(collision.GetContact(0).normal);
+
+            this.wallBounceSound.pitch = Mathf.Lerp(1.8f, 1.0f, this.objectRb.mass / 3.0f);
+            this.wallBounceSound.Play();
         }
     }
 
@@ -168,6 +176,8 @@ public class GrabbableObject : MonoBehaviour
         {
             this.gameObject.transform.position = this.spawnPoint;
             this.objectRb.velocity = Vector3.zero;
+
+            AudioSource.PlayClipAtPoint(this.destroyObjectSound, Camera.main.transform.position);
         }
 
         if (collision.gameObject.tag == "Wall")

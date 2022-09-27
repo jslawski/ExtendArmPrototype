@@ -16,12 +16,18 @@ public class HandControls : MonoBehaviour
     private Sprite grabHandSprite;
     [SerializeField]
     private BoxCollider handCollider;
-
     [SerializeField]
     private GrabbableObject grabbedObject;
-
     [SerializeField]
     private LayerMask detectableLayer;
+    [SerializeField]
+    private AudioSource closeHandSound;
+    [SerializeField]
+    private AudioSource grabSound;
+    [SerializeField]
+    private AudioSource punchSound;
+    [SerializeField]
+    private AudioSource armStretchSound;
 
     private Queue<Vector3> directionHistory;
     private Queue<Vector3> velocityHistory;
@@ -38,14 +44,14 @@ public class HandControls : MonoBehaviour
 
     private bool grabbing = false;
 
-    private float forceCollisionPercentage = 1.0f;
+    private float forceCollisionPercentage = 0.5f;
 
     public float analogDeadZoneMagnitude = 0.3f;
 
     public Transform bottomTransform;
 
     private void Awake()
-    {
+    {        
         this.controls = new PlayerControls();
         this.directionHistory = new Queue<Vector3>();
         this.velocityHistory = new Queue<Vector3>();
@@ -87,6 +93,9 @@ public class HandControls : MonoBehaviour
             return;
         }
 
+        this.closeHandSound.pitch = Random.Range(0.5f, 1.5f);
+        this.closeHandSound.Play();
+
         this.grabbing = true;
 
         if (metaDirection.magnitude >= this.analogDeadZoneMagnitude)
@@ -104,6 +113,8 @@ public class HandControls : MonoBehaviour
                 {
                     this.player.latched = true;
                 }
+
+                this.grabSound.Play();
             }
         }
 
@@ -198,6 +209,15 @@ public class HandControls : MonoBehaviour
 
         if (this.grabbedObject != null)
         {
+            if (this.armStretchSound.isPlaying == false)
+            {
+                this.armStretchSound.Play();
+            }
+            else
+            {
+                this.armStretchSound.pitch = Mathf.Lerp(1.0f, 3.0f, this.handRb.velocity.magnitude / 50.0f);
+            }
+            
             if (this.grabbedObject.isStationary == false)
             {
                 this.grabbedObject.objectRb.MovePosition(this.gameObject.transform.position);
@@ -218,6 +238,8 @@ public class HandControls : MonoBehaviour
         }
         else
         {
+            this.armStretchSound.Stop();
+            
             if (Vector3.Distance(this.handRb.position, this.player.armHand.transform.position) < 1.0f &&
                     this.metaDirection == Vector2.zero)
             {
@@ -241,9 +263,9 @@ public class HandControls : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision other)
     {
-        if (other.tag == "GrabbableObject")
+        if (other.gameObject.tag == "GrabbableObject")
         {
             if (this.grabbing == true && this.grabbedObject == null)
             {
@@ -253,6 +275,15 @@ public class HandControls : MonoBehaviour
                 float forceMagnitude = (this.handRb.velocity.magnitude * this.forceCollisionPercentage) * objectRb.mass;
 
                 objectRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+
+                if (this.punchSound.isPlaying == false)
+                {
+                    this.punchSound.pitch = Random.Range(0.8f, 1.5f);
+
+                    this.punchSound.volume = Mathf.Lerp(0.1f, 1.0f, this.handRb.velocity.magnitude / 50f);
+
+                    this.punchSound.Play();
+                }
             }
         }
     }
