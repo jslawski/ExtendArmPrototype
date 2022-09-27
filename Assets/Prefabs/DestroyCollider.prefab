@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd150f7034d5fc1438a90b531f06b1b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebugMesh: 1
+  showDebugMesh: 0
 --- !u!65 &4052785832565658349
 BoxCollider:
   m_ObjectHideFlags: 0

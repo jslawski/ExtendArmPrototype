@@ -50,7 +50,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabbed: 0
   objectRb: {fileID: 0}
-  maxSpeed: 100
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
   isStationary: 1
 --- !u!33 &8448873690252676875
 MeshFilter:
@@ -113,7 +115,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &8448873690252676872
 Rigidbody:
