@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class HandControls : MonoBehaviour
 {
@@ -50,6 +51,8 @@ public class HandControls : MonoBehaviour
 
     public Transform bottomTransform;
 
+    private Coroutine rumbleCoroutine = null;
+
     private void Awake()
     {        
         this.controls = new PlayerControls();
@@ -84,6 +87,8 @@ public class HandControls : MonoBehaviour
         this.controls.PlayerMap.Arm.canceled -= context => this.metaDirection = Vector2.zero;
 
         this.controls.Disable();
+
+        Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
     }
 
     private void InitiateGrab()
@@ -215,11 +220,15 @@ public class HandControls : MonoBehaviour
             }
             else
             {
-                this.armStretchSound.pitch = Mathf.Lerp(1.0f, 3.0f, this.handRb.velocity.magnitude / 50.0f);
+                float lerpedValue = Mathf.Lerp(1.0f, 3.0f, this.handRb.velocity.magnitude / 50.0f);
+
+                this.armStretchSound.pitch = lerpedValue;
             }
             
             if (this.grabbedObject.isStationary == false)
             {
+                this.GrabRumble();
+
                 this.grabbedObject.objectRb.MovePosition(this.gameObject.transform.position);
 
                 this.directionHistory.Enqueue(this.metaDirection);
@@ -239,7 +248,11 @@ public class HandControls : MonoBehaviour
         else
         {
             this.armStretchSound.Stop();
-            
+            if (this.rumbleCoroutine == null)
+            {
+                Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+            }
+
             if (Vector3.Distance(this.handRb.position, this.player.armHand.transform.position) < 1.0f &&
                     this.metaDirection == Vector2.zero)
             {
@@ -247,6 +260,33 @@ public class HandControls : MonoBehaviour
             }
         }
         
+    }
+
+    private void GrabRumble()
+    {
+        float motorLerpValue = Mathf.Lerp(0.0f, 1.0f, this.handRb.velocity.magnitude / 50.0f);
+        motorLerpValue *= (this.grabbedObject.objectRb.mass / 3.0f);
+
+        float leftMult = this.metaDirection.x < 0 ? Mathf.Abs(this.metaDirection.x) : 0.0f;
+        float rightMult = this.metaDirection.x > 0 ? Mathf.Abs(this.metaDirection.x) : 0.0f;
+
+        float leftAdd = 0.0f;
+        float rightAdd = 0.0f;
+        /*
+        if (this.metaDirection.x <= 0)
+        {
+            leftAdd = Mathf.Abs(this.metaDirection.y);
+        }
+        if (this.metaDirection.x >= 0)
+        {
+            leftAdd = Mathf.Abs(this.metaDirection.y);
+        }
+        */
+        float leftResult = (motorLerpValue * leftMult) + leftAdd;
+        float rightResult = (motorLerpValue * rightMult) + rightAdd;
+
+
+        Gamepad.current.SetMotorSpeeds(leftResult, rightResult);        
     }
 
     private void OnEnable()
@@ -274,18 +314,41 @@ public class HandControls : MonoBehaviour
                 Vector3 forceDirection = this.metaDirection.normalized;//(objectRb.position - this.handRb.position).normalized;
                 float forceMagnitude = (this.handRb.velocity.magnitude * this.forceCollisionPercentage) * objectRb.mass;
 
-                objectRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+                objectRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);                
 
                 if (this.punchSound.isPlaying == false)
                 {
+                    float lerpedValue = Mathf.Lerp(0.1f, 1.0f, this.handRb.velocity.magnitude / 50f);
+
                     this.punchSound.pitch = Random.Range(0.8f, 1.5f);
 
-                    this.punchSound.volume = Mathf.Lerp(0.1f, 1.0f, this.handRb.velocity.magnitude / 50f);
+                    this.punchSound.volume = lerpedValue;
 
                     this.punchSound.Play();
+                    if (this.rumbleCoroutine == null)
+                    {
+                        lerpedValue *= (objectRb.mass / 3.0f);
+                        this.rumbleCoroutine = StartCoroutine(this.Rumble(lerpedValue));
+                    }
                 }
             }
         }
+    }
+
+    private IEnumerator Rumble(float value)
+    {        
+        Gamepad.current.SetMotorSpeeds(value, value);
+
+        int waitFrames = 10;
+
+        for (int i = 0; i < waitFrames; i++)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+
+        Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+
+        this.rumbleCoroutine = null;
     }
 
     private void OnCollisionStay(Collision collision)

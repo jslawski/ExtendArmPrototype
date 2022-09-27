@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool latched = false;
 
+    [SerializeField]
     private GameObject instructionsObject;
 
     void Awake()
@@ -115,10 +117,13 @@ public class PlayerMovement : MonoBehaviour
         if (this.latched == false)
         {
             this.MoveFreely();
+            Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
         }
         else
         {
             this.MoveLatched();
+
+            Gamepad.current.SetMotorSpeeds(0.1f, 0.1f);
         }
     }
 
