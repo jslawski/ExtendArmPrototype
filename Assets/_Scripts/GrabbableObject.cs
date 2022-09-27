@@ -22,7 +22,7 @@ public class GrabbableObject : MonoBehaviour
 
     private Rigidbody handRb;
 
-    private float forceCollisionPercentage = 0.75f;
+    private float forceCollisionPercentage = 0.3f;
 
     private Vector3 spawnPoint = Vector3.zero;
 
@@ -46,22 +46,6 @@ public class GrabbableObject : MonoBehaviour
     
     void Update()
     {
-        /*
-        Vector3 viewportPos = Camera.main.WorldToViewportPoint(this.gameObject.transform.position);
-
-        if (this.objectRb.velocity.magnitude <= 1 && this.grabbed == false)
-        {
-            if (viewportPos.x <= 0.0f || viewportPos.x > 1.0f)
-            {
-                Destroy(this.gameObject);
-            }
-            if (viewportPos.y <= 0.0f || viewportPos.y > 1.0f)
-            {
-                Destroy(this.gameObject);
-            }
-        }
-        */
-
         if (this.objectRb.velocity.magnitude > this.maxSpeed)
         {
             this.objectRb.velocity = this.objectRb.velocity.normalized * this.maxSpeed;
@@ -151,13 +135,12 @@ public class GrabbableObject : MonoBehaviour
 
             otherRb.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
 
-            Debug.LogError("DRAW!");
-            StartCoroutine(this.DrawThingy(forceDirection));
-            float raycastLength = ((this.objectCollider.radius * this.gameObject.transform.localScale.x) + 0.5f);
-            if (Physics.Raycast(this.transform.position, forceDirection, raycastLength, this.wallLayer))
-            {
-                Debug.LogError("NotApplyingForce!");
-            }            
+            //StartCoroutine(this.DrawThingy(forceDirection));
+            //float raycastLength = ((this.objectCollider.radius * this.gameObject.transform.localScale.x) + 0.5f);
+            //if (Physics.Raycast(this.transform.position, forceDirection, raycastLength, this.wallLayer))
+           // {
+           //     Debug.LogError("NotApplyingForce!");
+           // }            
         }
 
         if (collision.collider.tag == "Wall" && this.grabbed == false)

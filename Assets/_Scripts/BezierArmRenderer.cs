@@ -92,12 +92,6 @@ public class BezierArmRenderer : MonoBehaviour
 
         this.bezierPoints[1].position = Vector3.Lerp(this.playerEndpoint.position, lowerPointTargetDirection, this.lowerPointDistancePercentage);
         this.bezierPoints[2].position = Vector3.Lerp(this.playerEndpoint.position, upperPointTargetDirection, this.upperPointDistancePercentage);
-
-        //Vector3 targetLowerPointVector = lowerPointTargetDirection * originalLowerPointPosition.magnitude;
-        //Vector3 targetUpperPointVector = upperPointTargetDirection * originalUpperPointPosition.magnitude;
-
-        //this.bezierPoints[1].position = targetLowerPointVector - this.playerEndpoint.position;
-        //this.bezierPoints[2].position = targetUpperPointVector - this.playerEndpoint.position;
         
         this.RenderArm();
     }

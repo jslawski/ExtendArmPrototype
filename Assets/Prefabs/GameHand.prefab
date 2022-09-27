@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7005437966452455733}
   - component: {fileID: 3210833079582185561}
   m_Layer: 8
-  m_Name: HandSprite (1)
+  m_Name: HandCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,6 +45,37 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 12.62, y: 11.45, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1812351249069157732
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 751235205093811842}
+  m_Layer: 0
+  m_Name: HandBottom
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &751235205093811842
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1812351249069157732}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -6.02, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 636843075472448303}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3158098121795263002
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,14 +141,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handRb: {fileID: 1275053373}
   handSpriteRenderer: {fileID: 9191520168272649643}
-  openHandSprite: {fileID: 21300000, guid: 363d52df1b180d54cb5b53b38d6b5dbf, type: 3}
-  grabHandSprite: {fileID: 21300000, guid: 5040aef12471c7c4bad9617cf7813d43, type: 3}
+  openHandSprite: {fileID: 21300000, guid: c7418f71bf68a2c479ee6f5e5b4f9bbb, type: 3}
+  grabHandSprite: {fileID: 21300000, guid: 37d6bd71e73054a4285a12b72095d6d2, type: 3}
   handCollider: {fileID: 8081560934519828080}
+  grabbedObject: {fileID: 0}
   detectableLayer:
     serializedVersion: 2
     m_Bits: 8
   maxQueueSize: 5
   analogDeadZoneMagnitude: 0.3
+  bottomTransform: {fileID: 751235205093811842}
 --- !u!1 &9142106058759242143
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,6 +162,7 @@ GameObject:
   - component: {fileID: 636843075472448303}
   - component: {fileID: 9191520168272649643}
   - component: {fileID: 8081560934519828080}
+  - component: {fileID: 5863736423424360299}
   m_Layer: 9
   m_Name: HandSprite
   m_TagString: Untagged
@@ -145,9 +179,10 @@ Transform:
   m_GameObject: {fileID: 9142106058759242143}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 751235205093811842}
   m_Father: {fileID: 5936239451369217365}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -192,7 +227,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 363d52df1b180d54cb5b53b38d6b5dbf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c7418f71bf68a2c479ee6f5e5b4f9bbb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -216,3 +251,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5, y: 5, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5863736423424360299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142106058759242143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bea03c701a6fe45951f7af0b99910d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isHand: 1

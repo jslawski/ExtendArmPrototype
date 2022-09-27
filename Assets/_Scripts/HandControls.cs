@@ -42,6 +42,8 @@ public class HandControls : MonoBehaviour
 
     public float analogDeadZoneMagnitude = 0.3f;
 
+    public Transform bottomTransform;
+
     private void Awake()
     {
         this.controls = new PlayerControls();
@@ -62,12 +64,6 @@ public class HandControls : MonoBehaviour
 
         this.controls.PlayerMap.Arm.performed += context => this.metaDirection = context.ReadValue<Vector2>();
         this.controls.PlayerMap.Arm.canceled += context => this.metaDirection = Vector2.zero;
-
-        /*if (this.controls.PlayerMap.Grab.() || this.controls.PlayerMap.Grab2.WasPerformedThisFrame())
-        {
-            this.InitiateGrab();
-        }
-        */
     }    
 
     private void OnDestroy()
@@ -193,6 +189,13 @@ public class HandControls : MonoBehaviour
 
     private void Update()
     {
+        Vector3 metaDirection3D = new Vector3(this.metaDirection.x, this.metaDirection.y, 0.0f);
+        Vector3 reflectionNormal = (this.handRb.transform.position - this.player.transform.position).normalized;
+        Vector3 reflectionVector = (metaDirection3D - (2 * Vector3.Dot(metaDirection3D.normalized, reflectionNormal) * reflectionNormal));
+
+        float handRotationAngle = (Mathf.Atan2(reflectionVector.y, reflectionVector.x) * Mathf.Rad2Deg) + 90f;
+        this.handSpriteRenderer.transform.rotation = Quaternion.Euler(0.0f, 0.0f, -handRotationAngle);
+
         if (this.grabbedObject != null)
         {
             if (this.grabbedObject.isStationary == false)

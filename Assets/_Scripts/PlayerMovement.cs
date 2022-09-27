@@ -81,7 +81,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 GameObject gameHandInstance = Instantiate(this.gameHandPrefab, this.transform.position, new Quaternion());
                 this.gameHandRB = gameHandInstance.GetComponent<Rigidbody>();
-                this.armRender.SetupArmRenderer(this.gameHandRB.transform, this.armHand.transform);
+                Transform bottomHandTransform = gameHandInstance.GetComponent<HandControls>().bottomTransform;
+                this.armRender.SetupArmRenderer(bottomHandTransform, this.armHand.transform);
             }
 
             this.gameHandTargetPosition = Vector3.Lerp(this.gameHandRB.position,
