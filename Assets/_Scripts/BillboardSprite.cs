@@ -4,27 +4,21 @@ using UnityEngine;
 
 public class BillboardSprite : MonoBehaviour
 {
-    private Transform targetObject;
-
-    public bool isHand = false;
-
-    private void Start()
-    {
-        this.targetObject = GameObject.Find("CameraFollow").transform;
-    }
+    public bool isHand = false;    
 
     // Update is called once per frame
     void LateUpdate()
     {
         Vector3 originalRotation = this.gameObject.transform.rotation.eulerAngles;
-        if (FollowCam.currentMode == CameraMode.TopDown)
+
+        this.gameObject.transform.forward = -Camera.main.transform.forward;
+        
+        if (FollowCam.currentMode == CameraMode.Isometric)
         {
-            this.gameObject.transform.LookAt(Camera.main.transform, Vector3.up);            
-        }
-        else
-        {
-            this.gameObject.transform.LookAt(Camera.main.transform, Vector3.back);
-        }
+            this.gameObject.transform.rotation = Quaternion.Euler(this.gameObject.transform.rotation.eulerAngles.x,
+                                                              this.gameObject.transform.rotation.eulerAngles.y,
+                                                              this.gameObject.transform.rotation.eulerAngles.z + 12);
+        }        
 
         if (this.isHand == true)
         {
