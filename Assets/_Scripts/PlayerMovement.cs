@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private BezierArmRenderer armRender;
 
-    public bool latched = false;
+    private bool latched = false;
 
     [SerializeField]
     private GameObject instructionsObject;
@@ -112,18 +112,27 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void LatchPlayer()
+    {
+        this.latched = true;
+        Gamepad.current.SetMotorSpeeds(0.1f, 0.1f);
+    }
+
+    public void UnlatchPlayer()
+    {
+        this.latched = false;
+        Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+    }
+
     private void FixedUpdate()
     {        
         if (this.latched == false)
         {
-            this.MoveFreely();
-            Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+            this.MoveFreely();            
         }
         else
         {
             this.MoveLatched();
-
-            Gamepad.current.SetMotorSpeeds(0.1f, 0.1f);
         }
     }
 

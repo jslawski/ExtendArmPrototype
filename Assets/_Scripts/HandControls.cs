@@ -116,7 +116,7 @@ public class HandControls : MonoBehaviour
 
                 if (this.grabbedObject.isStationary == true)
                 {
-                    this.player.latched = true;
+                    this.player.LatchPlayer();
                 }
 
                 this.grabSound.Play();
@@ -137,7 +137,7 @@ public class HandControls : MonoBehaviour
             }
             else
             {
-                this.player.latched = false;
+                this.player.UnlatchPlayer();
                 this.grabbedObject.GetReleased(Vector3.zero, 0.0f);
                 this.grabbedObject = null;
 
@@ -261,7 +261,6 @@ public class HandControls : MonoBehaviour
         }
         
     }
-
     private void GrabRumble()
     {
         float motorLerpValue = Mathf.Lerp(0.0f, 1.0f, this.handRb.velocity.magnitude / 50.0f);
@@ -346,8 +345,7 @@ public class HandControls : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-        Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
-
+        Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);        
         this.rumbleCoroutine = null;
     }
 

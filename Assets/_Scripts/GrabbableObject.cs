@@ -117,7 +117,7 @@ public class GrabbableObject : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.tag == "GrabbableObject")
+        if (this.isStationary == false && collision.collider.tag == "GrabbableObject")
         {
             Rigidbody otherRb = collision.gameObject.GetComponent<Rigidbody>();
 
