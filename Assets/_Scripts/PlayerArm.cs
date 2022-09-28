@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerArm : MonoBehaviour
+public class MetaPlayerArm : MonoBehaviour
 {
     [SerializeField, Range(0, 100)]
     private float maxArmDistance = 10f;
@@ -18,9 +18,6 @@ public class PlayerArm : MonoBehaviour
     private Rigidbody armRB;
 
     private Vector3 targetPosition;
-
-
-
 
     void Awake()
     {
@@ -46,9 +43,7 @@ public class PlayerArm : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
-        
-
+    {       
         this.armRB.MovePosition(this.targetPosition);
     }
 

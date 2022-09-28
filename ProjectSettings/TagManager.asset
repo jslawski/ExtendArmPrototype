@@ -3,19 +3,23 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - GrabbableObject
+  - PlayerHand
+  - DestroyCollider
+  - Wall
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Grabbable
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Grabbed
+  - Player
+  - HandAlwaysOn
+  - HandFist
+  - Wall
   - 
   - 
   - 
