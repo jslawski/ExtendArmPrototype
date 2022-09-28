@@ -312,7 +312,7 @@ public class HandControls : MonoBehaviour
 
                     this.punchSound.pitch = Random.Range(0.8f, 1.5f);
 
-                    this.punchSound.volume = lerpedValue;
+                    this.punchSound.volume = lerpedValue * 0.5f;
 
                     this.punchSound.Play();
                     if (this.rumbleCoroutine == null)

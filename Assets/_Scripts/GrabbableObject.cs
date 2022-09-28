@@ -34,7 +34,7 @@ public class GrabbableObject : MonoBehaviour
     [SerializeField]
     private AudioSource objectBounceSound;
     [SerializeField]
-    private AudioClip destroyObjectSound;
+    private AudioSource destroyObjectSound;
 
     // Start is called before the first frame update
     void Start()
@@ -177,7 +177,7 @@ public class GrabbableObject : MonoBehaviour
             this.gameObject.transform.position = this.spawnPoint;
             this.objectRb.velocity = Vector3.zero;
 
-            AudioSource.PlayClipAtPoint(this.destroyObjectSound, Camera.main.transform.position);
+            this.destroyObjectSound.Play();
         }
 
         if (collision.gameObject.tag == "Wall")
