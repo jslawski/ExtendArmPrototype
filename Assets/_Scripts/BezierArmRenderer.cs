@@ -27,11 +27,33 @@ public class BezierArmRenderer : MonoBehaviour
     [SerializeField, Range(0, 1)]
     private float upperPointDeviation = 0.5f;
 
+    private void Start()
+    {
+        FollowCam.OnSpriteModeChanged += this.UpdateRenderer;
+    }
+
     public void SetupArmRenderer(Transform gameHand, Transform metaHand)
     {
         this.gameHandEndpoint = gameHand;
         this.metaHandTransform = metaHand;
         this.armLine.positionCount = 100;
+    }
+
+    private void OnDestroy()
+    {
+        FollowCam.OnSpriteModeChanged -= this.UpdateRenderer;
+    }
+
+    private void UpdateRenderer()
+    {
+        if (FollowCam.spritesEnabled == true)
+        {
+            this.armLine.material = Resources.Load<Material>("Materials/Arm");
+        }
+        else
+        {
+            this.armLine.material = Resources.Load<Material>("Materials/black");
+        }
     }
 
     private Vector3 CalculateCurvePoint(float tValue, Vector3 position0, Vector3 position1, Vector3 position2, Vector3 position3)

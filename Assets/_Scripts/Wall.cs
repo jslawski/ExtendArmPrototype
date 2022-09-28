@@ -14,7 +14,28 @@ public class Wall : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        FollowCam.OnSpriteModeChanged += this.ToggleMaterials;
+    }
+
+    private void ToggleMaterials()
+    {
+        if (FollowCam.spritesEnabled == true)
+        {
+            this.topRenderer.material = Resources.Load<Material>("Materials/TopMaterial");
+            this.sideRenderer1.material = Resources.Load<Material>("Materials/SideMaterial");
+            this.sideRenderer2.material = Resources.Load<Material>("Materials/SideMaterial");
+        }
+        else
+        {
+            this.topRenderer.material = Resources.Load<Material>("Materials/DebugTop");
+            this.sideRenderer1.material = Resources.Load<Material>("Materials/DebugSide");
+            this.sideRenderer2.material = Resources.Load<Material>("Materials/DebugSide");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        FollowCam.OnSpriteModeChanged -= this.ToggleMaterials;
     }
 
     // Update is called once per frame

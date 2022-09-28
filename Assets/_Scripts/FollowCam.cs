@@ -29,9 +29,13 @@ public class FollowCam : MonoBehaviour
     
     public static CameraMode currentMode = CameraMode.TopDown;
 
+    public static bool spritesEnabled = true;
+
     [SerializeField, Range(0f, 10f)]
     private float cameraMoveSpeed = 3.0f;
 
+    public delegate void SpriteModeChanged();
+    public static SpriteModeChanged OnSpriteModeChanged;
 
     // Start is called before the first frame update
     void Awake()
@@ -89,6 +93,17 @@ public class FollowCam : MonoBehaviour
         this.transform.position = Vector3.Lerp(this.transform.position, 
             new Vector3(target.position.x, target.position.y, target.position.z) + offset, 
             (this.cameraMoveSpeed * Time.deltaTime));
+
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            FollowCam.spritesEnabled = !FollowCam.spritesEnabled;
+            
+            if (FollowCam.OnSpriteModeChanged != null)
+            {
+                FollowCam.OnSpriteModeChanged();
+            }
+        }
+
     }
 
     private void OnEnable()

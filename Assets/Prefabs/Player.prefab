@@ -122,7 +122,7 @@ MonoBehaviour:
   gameHandFollowSpeed: 10
   latchedPlayerFollowSpeed: 5
   armRender: {fileID: 6909014597394441243}
-  latched: 0
+  instructionsObject: {fileID: 0}
 --- !u!54 &6909014596645995976
 Rigidbody:
   m_ObjectHideFlags: 0

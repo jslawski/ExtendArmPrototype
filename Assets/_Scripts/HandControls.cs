@@ -60,6 +60,8 @@ public class HandControls : MonoBehaviour
         this.velocityHistory = new Queue<Vector3>();
 
         this.player = GameObject.Find("Player").GetComponent<PlayerMovement>();
+
+        
     }
 
     // Start is called before the first frame update
@@ -73,7 +75,34 @@ public class HandControls : MonoBehaviour
 
         this.controls.PlayerMap.Arm.performed += context => this.metaDirection = context.ReadValue<Vector2>();
         this.controls.PlayerMap.Arm.canceled += context => this.metaDirection = Vector2.zero;
-    }    
+
+        FollowCam.OnSpriteModeChanged += UpdateSprites;
+        UpdateSprites();
+    }
+
+    private void UpdateSprites()
+    {
+        if (FollowCam.spritesEnabled == true)
+        {
+            this.openHandSprite = Resources.Load<Sprite>("Sprites/Assets/Open");
+            this.grabHandSprite = Resources.Load<Sprite>("Sprites/Assets/Closed");            
+        }
+        else
+        {
+            this.openHandSprite = Resources.Load<Sprite>("Sprites/openHand");
+            this.grabHandSprite = Resources.Load<Sprite>("Sprites/closedHand");
+        }
+
+        if (this.grabbing == true)
+        {
+            this.handSpriteRenderer.sprite = this.grabHandSprite;
+        }
+        else
+        {
+            this.handSpriteRenderer.sprite = this.openHandSprite;
+        }
+    }
+
 
     private void OnDestroy()
     {
@@ -89,6 +118,8 @@ public class HandControls : MonoBehaviour
         this.controls.Disable();
 
         Gamepad.current.SetMotorSpeeds(0.0f, 0.0f);
+
+        FollowCam.OnSpriteModeChanged -= UpdateSprites;
     }
 
     private void InitiateGrab()
