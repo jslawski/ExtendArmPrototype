@@ -29,6 +29,8 @@ public class HandControls : MonoBehaviour
     private AudioSource punchSound;
     [SerializeField]
     private AudioSource armStretchSound;
+    [SerializeField]
+    private Animator armAnimator;
 
     private Queue<Vector3> directionHistory;
     private Queue<Vector3> velocityHistory;
@@ -129,6 +131,8 @@ public class HandControls : MonoBehaviour
             return;
         }
 
+        this.armAnimator.SetBool("popBool", true);
+
         this.closeHandSound.pitch = Random.Range(0.5f, 1.5f);
         this.closeHandSound.Play();
 
@@ -160,6 +164,8 @@ public class HandControls : MonoBehaviour
 
     private void CancelGrab()
     {
+        this.armAnimator.SetBool("popBool", false);
+
         if (this.grabbedObject != null)
         {
             if (this.grabbedObject.isStationary == false)

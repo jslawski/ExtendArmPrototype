@@ -156,6 +156,7 @@ MonoBehaviour:
   grabSound: {fileID: 8197446798618835287}
   punchSound: {fileID: 6663719487206906854}
   armStretchSound: {fileID: 1180734417404012767}
+  armAnimator: {fileID: 4923467551595814988}
   maxQueueSize: 5
   analogDeadZoneMagnitude: 0.3
   bottomTransform: {fileID: 751235205093811842}
@@ -555,6 +556,7 @@ GameObject:
   - component: {fileID: 9191520168272649643}
   - component: {fileID: 8081560934519828080}
   - component: {fileID: 5863736423424360299}
+  - component: {fileID: 4923467551595814988}
   m_Layer: 9
   m_Name: HandSprite
   m_TagString: Untagged
@@ -657,3 +659,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isHand: 1
   isPlayer: 0
+--- !u!95 &4923467551595814988
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9142106058759242143}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8015244116a5a794589cf576acf7f1c2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
