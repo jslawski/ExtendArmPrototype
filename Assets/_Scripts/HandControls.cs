@@ -263,26 +263,17 @@ public class HandControls : MonoBehaviour
     }
     private void GrabRumble()
     {
-        float motorLerpValue = Mathf.Lerp(0.0f, 1.0f, this.handRb.velocity.magnitude / 50.0f);
+        float motorLerpValue = Mathf.Lerp(0.0f, 1.0f, this.handRb.velocity.magnitude / 60.0f);
         motorLerpValue *= (this.grabbedObject.objectRb.mass / 3.0f);
 
         float leftMult = this.metaDirection.x < 0 ? Mathf.Abs(this.metaDirection.x) : 0.0f;
         float rightMult = this.metaDirection.x > 0 ? Mathf.Abs(this.metaDirection.x) : 0.0f;
 
-        float leftAdd = 0.0f;
-        float rightAdd = 0.0f;
-        /*
-        if (this.metaDirection.x <= 0)
-        {
-            leftAdd = Mathf.Abs(this.metaDirection.y);
-        }
-        if (this.metaDirection.x >= 0)
-        {
-            leftAdd = Mathf.Abs(this.metaDirection.y);
-        }
-        */
-        float leftResult = (motorLerpValue * leftMult) + leftAdd;
-        float rightResult = (motorLerpValue * rightMult) + rightAdd;
+        leftMult += Mathf.Abs(this.metaDirection.y);
+        rightMult += Mathf.Abs(this.metaDirection.y);
+
+        float leftResult = (motorLerpValue * leftMult);
+        float rightResult = (motorLerpValue * rightMult);
 
 
         Gamepad.current.SetMotorSpeeds(leftResult, rightResult);        

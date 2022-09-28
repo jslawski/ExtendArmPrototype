@@ -115,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
     public void LatchPlayer()
     {
         this.latched = true;
-        Gamepad.current.SetMotorSpeeds(0.1f, 0.1f);
+        Gamepad.current.SetMotorSpeeds(0.11f, 0.11f);
     }
 
     public void UnlatchPlayer()
